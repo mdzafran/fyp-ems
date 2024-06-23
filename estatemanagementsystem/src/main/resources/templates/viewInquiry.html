@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Estate Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" th:fragment="header">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/}">Estate Management System</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+    <br />
+    <br />
+    <br />
+    <div class="container">
+        <div class="row col-md-8 offset-md-2">
+            <div class="card">
+                <div th:if="${param.success}">
+                    <div class="alert alert-info">Inquiry</div>
+                </div>
+                <div class="card-header">
+                    <h2 class="text-center">Inquiry Details</h2>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped table-bordered table-hover">
+                        <tbody>
+                            <!-- Iterate through users -->
+                            <tr>
+                                <td><b>Inquiry From : </b></td>
+                                <td th:text="${inquiry?.user.name}"></td>
+                            </tr>
+                            <tr>
+                                <td><b>Inquiry For : </b></td>
+                                <td th:text="${inquiry?.inquiryFor}"></td>
+                            </tr>
+                            <tr>
+                                <td><b>Date : </b></td>
+                                <td th:text="${inquiry?.inquiryDate}"></td>
+                            </tr>
+                            <tr>
+                                <td><b>Agency : </b></td>
+                                <td>
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div th:each="agency: ${inquiry.inquiryAgency}">
+                                                        <text th:text="${agency.agencyName}"></text>
+                                                    </div>
+                                                </td>
+                                                
+                                                <td>
+                                                    <div th:each="status: ${inquiry.inquiryAgencyStatus}">
+                                                        <text> - </text>
+                                                        <text th:text="${status}"></text>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>File : </b></td>
+                                <td>
+                                    <div>
+                                        <b>IC File : </b><br>
+                                        <p th:text="${inquiry?.icFilePath}"></p>
+                                        <b>Death Certificate : </b><br>
+                                        <p th:text="${inquiry?.deathCertPath}"></p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Agreement : </b></td>
+                                <td>
+                                    <div>
+                                        <p>
+                                            I hereby <b th:text="${inquiry?.agreement} ? 'Agreed' : 'Denied'"></b> to authorize the use of the provided information for the purpose of retrieving data pertaining to the property of my deceased family members. I solemnly acknowledge that any falsification of information provided herein may result in legal repercussions in accordance with applicable laws and regulations.
+                                        </p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Inquiry Status : </b></td>
+                                <td th:text="${inquiry?.status}"></td>
+                            </tr>
+                            <tr>
+                                <td><b>Inquiry Total Fee : </b></td>
+                                <td class="total-fee" th:text="${inquiry?.totalPayment}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            var serviceFeeElements = document.querySelectorAll('.total-fee');
+                            serviceFeeElements.forEach(function(element) {
+                                var value = parseFloat(element.textContent);
+                                if (!isNaN(value)) {
+                                    element.textContent = 'RM ' + value.toFixed(2);
+                                }
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Accept a payment</title>
+    <meta name="description" content="A demo of a payment on Stripe" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/css/checkout.css" />
+    <script src="https://js.stripe.com/v3/"></script>
+    <script th:inline="javascript">
+
+      /*<![CDATA[*/
+	    
+         var stripePublicKey = /*[[${stripePublicKey}]]*/ 'pk_test_51PNyDbRqqdlnM4yvCTFze1cjsjiADkQiXj08tR8c9xIe1txcSld4kHetZyCM0UvKycOgKEbjmQvWSg8qlL5bAahb00tY3JS4kF';
+
+       /*]]>*/
+    </script> 
+    <script src="/js/client.js" defer></script>
+  </head>
+  <body>
+    
+    <!-- Display a payment form -->
+    <form id="payment-form">
+      <div>
+        <h2>Payment Detail</h2>
+        <table>
+          <tbody>
+            <tr>
+              <td>Inquiry From : </td>
+              <td th:text="${inquiry?.user.name}"></td>
+            </tr>
+            <tr>
+              <td>Inquiry To : </td>
+              <td>
+                <ul th:each="agency : ${inquiry.inquiryAgency}">
+                  <li th:text="${agency.agencyName}"></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>Total Fee : </td>
+              <td class="service-fee" th:text="${inquiry.totalPayment}"></td>
+            </tr>
+          </tbody>
+        </table>
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+              var serviceFeeElements = document.querySelectorAll('.service-fee');
+              serviceFeeElements.forEach(function(element) {
+                  var value = parseFloat(element.textContent);
+                  if (!isNaN(value)) {
+                      element.textContent = 'RM ' + value.toFixed(2);
+                  }
+              });
+          });
+        </script>
+      </div>
+      <br><br>
+      <input type="hidden" id="inquiryId" name="inquiryId" th:value="${inquiry.id}">
+      <input type="hidden" id="amount" name="amount" th:value="${inquiry.totalPayment}">
+      <label for="email">Email Address</label>
+      <input type="text" id="email" placeholder="Enter email address" />
+      <div id="payment-element">
+        <!--Stripe.js injects the Payment Element-->
+      </div>
+      <button id="submit">
+        <div class="spinner hidden" id="spinner"></div>
+        <span id="button-text">Pay now</span>
+      </button>
+      <div id="payment-message" class="hidden"></div>
+    </form>
+  </body>
+</html>

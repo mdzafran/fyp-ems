@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Estate Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .pic-table th,
+        .pic-table td {
+            padding: 8px;
+        }
+
+        .pic-table th:first-child,
+        .pic-table td:first-child {
+            padding-left: 0;
+        }
+
+        .pic-table th:last-child,
+        .pic-table td:last-child {
+            padding-right: 0;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" th:fragment="header">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">Estate Management System</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</nav>
+<br />
+<br />
+<br />
+
+<div class="container">
+    <div class="row col-md-8 offset-md-2">
+        <div class="card">
+            <div th:if="${param.success}">
+                <div class="alert alert-info">Please add an external agency</div>
+            </div>
+            <div class="card-header">
+                <h2 class="text-center">Add</h2>
+            </div>
+            <div class="card-body">
+                <form method="post" role="form" th:action="@{/admin/externalAgency/add/done}" th:object="${externalAgency}">
+
+                    <div class="form-group mb-3">
+                        <label class="form-label">External Agency Name</label>
+                        <input class="form-control"
+                               id="agencyName"
+                               name="agencyName"
+                               placeholder="Enter agency name"
+                               th:field="*{agencyName}"
+                               type="text"
+                        />
+                        <p th:errors="*{agencyName}" class="text-danger"
+                           th:if="${#fields.hasErrors('agencyName')}">
+                        </p>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label class="form-label">Email</label>
+                        <input class="form-control"
+                               id="email"
+                               name="email"
+                               placeholder="Enter email address"
+                               th:field="*{email}"
+                               type="email"
+                        />
+                        <p th:errors="*{email}" class="text-danger"
+                           th:if="${#fields.hasErrors('email')}">
+                        </p>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label">Address</label>
+                        <input class="form-control"
+                               id="address"
+                               name="address"
+                               placeholder="Enter Address"
+                               th:field="*{address}"
+                               type="text"
+                        />
+                        <p th:errors="*{address}" class="text-danger"
+                           th:if="${#fields.hasErrors('address')}">
+                        </p>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label">Postcode</label>
+                        <input class="form-control"
+                               id="postcode"
+                               name="postcode"
+                               placeholder="Enter Postcode"
+                               th:field="*{postcode}"
+                               type="text"
+                        />
+                        <p th:errors="*{postcode}" class="text-danger"
+                           th:if="${#fields.hasErrors('postcode')}">
+                        </p>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="stateList">Select State:</label>
+                        <select id="state" name="state" class="form-control" th:field="*{state}">
+                            <option value="">Select State</option>
+                            <th:block th:each="state : ${stateList}">
+                                <option th:attr="id=${state.stateName}" th:value="${state.stateName}" th:text="${state.stateName}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3" id="districtDiv" style="display: none;">
+                        <label for="districtList">Select District:</label>
+                        <select id="district" name="district" class="form-control" th:field="*{district}">
+                            <option value="">Select District</option>
+                            <th:block th:each="district : ${districtList}">
+                                <option th:attr="class=${district.stateName}" th:value="${district.districtName}" th:text="${district.districtName}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+
+                    <script>
+                        document.getElementById('state').addEventListener('change', function () {
+                        var selectedOption = this.options[this.selectedIndex]; // Get the selected option
+                        var stateId = selectedOption.getAttribute('id'); // Retrieve the id attribute of the selected option
+                        var districtSelect = document.getElementById('district');
+                        var districtOptions = districtSelect.getElementsByTagName('option');
+
+                        // Loop through each option in the district dropdown
+                        for (var i = 0; i < districtOptions.length; i++) {
+                            var option = districtOptions[i];
+                            var optionClasses = option.classList;
+                            if (stateId) {
+                                var stateIdWords = stateId.split(' '); // Split stateId into words
+                                var showOption = false;
+                                // Check if any word in stateId exists in the option's class list
+                                for (var j = 0; j < stateIdWords.length; j++) {
+                                    if (optionClasses.contains(stateIdWords[j])) {
+                                        showOption = true;
+                                    } else {
+                                        showOption = false;
+                                    }
+                                }
+                                // Show or hide the option based on whether it contains any of the words in stateId
+                                option.style.display = showOption ? 'block' : 'none';
+                            } else {
+                                // Show all options if no state is selected
+                                option.style.display = 'block';
+                            }
+                        }
+
+                        // Show or hide the district dropdown based on whether a state is selected
+                        document.getElementById('districtDiv').style.display = (stateId) ? 'block' : 'none';
+                    });
+                    </script>
+
+
+                    <div class="form-group mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input class="form-control"
+                               id="phoneNum"
+                               name="phoneNum"
+                               placeholder="Enter Phone Number"
+                               th:field="*{phoneNum}"
+                               type="text"
+                        />
+                        <p th:errors="*{phoneNum}" class="text-danger"
+                           th:if="${#fields.hasErrors('phoneNum')}">
+                        </p>
+                    </div>
+
+                    <!-- <div class="form-group mb-3" id="picSection">
+                        <label class="form-label">PIC (Person in Charge)</label>
+                        <table class="pic-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th style="width: 40%;">Full Name</th>
+                                    <th>Phone Number</th>
+                                    <th>Email Address</th>
+                                </tr>
+                            </thead>
+                            <tbody id="picContainer">
+                                <tr class="pic-entry">
+                                    <td class="pic-number">1</td>
+                                    <td>
+                                        <input class="form-control pic-name" name="pic[0].picName" placeholder="Enter Full Name" type="text">
+                                    </td>
+                                    <td>
+                                        <input class="form-control pic-phone" name="pic[0].picPhoneNum" placeholder="Enter Phone Number" type="text">
+                                    </td>
+                                    <td>
+                                        <input class="form-control pic-email" name="pic[0].picEmail" placeholder="Enter Email Address" type="email">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br>
+                        <button type="button" class="btn btn-primary add-pic">Add PIC</button>
+                        <button type="button" class="btn btn-danger remove-pic">Remove PIC</button>
+                    </div>
+                    
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const picSection = document.getElementById('picSection');
+                            const picContainer = document.getElementById('picContainer');
+                    
+                            picSection.addEventListener('click', function(event) {
+                                if (event.target.classList.contains('add-pic')) {
+                                    const picEntry = document.createElement('tr');
+                                    picEntry.classList.add('pic-entry');
+                                    picEntry.innerHTML = `
+                                        <td class="pic-number">${picContainer.childElementCount + 1}</td>
+                                        <td>
+                                            <input class="form-control pic-name" name="pic[${picContainer.childElementCount}].picName" placeholder="Enter Full Name" type="text">
+                                        </td>
+                                        <td>
+                                            <input class="form-control pic-phone" name="pic[${picContainer.childElementCount}].picPhoneNum" placeholder="Enter Phone Number" type="text">
+                                        </td>
+                                        <td>
+                                            <input class="form-control pic-email" name="pic[${picContainer.childElementCount}].picEmail" placeholder="Enter Email Address" type="email">
+                                        </td>
+                                    `;
+                                    picContainer.appendChild(picEntry);
+                                    updatePicNumbers();
+                                } else if (event.target.classList.contains('remove-pic')) {
+                                    const picEntries = picSection.querySelectorAll('.pic-entry');
+                                    if (picEntries.length > 1) {
+                                        picEntries[picEntries.length - 1].remove();
+                                        updatePicNumbers();
+                                    }
+                                }
+                            });
+                    
+                            function updatePicNumbers() {
+                                const picNumbers = picSection.querySelectorAll('.pic-number');
+                                picNumbers.forEach((number, index) => {
+                                    number.textContent = index + 1;
+                                });
+                            }
+                        });
+                    </script>                               -->
+
+                    <div class="form-group mb-3">
+                        <label class="form-label">Service Fee</label>
+                        <div class="input-group">
+                            <input class="form-control"
+                                   id="displayServiceFee"
+                                   placeholder="0.00"
+                                   type="text"
+                                   onblur="formatServiceFee()"
+                                   oninput="removeExtraDecimals()"
+                            />
+                            <input type="hidden" id="serviceFee" name="serviceFee" th:field="*{serviceFee}"/>
+                        </div>
+                        <p th:errors="*{serviceFee}" class="text-danger"
+                           th:if="${#fields.hasErrors('serviceFee')}">
+                        </p>
+                    </div>
+                    
+                    <script>
+                    function formatServiceFee() {
+                        var displayInput = document.getElementById('displayServiceFee');
+                        var value = parseFloat(displayInput.value.replace(/RM\s*/i, '')); // Remove the RM prefix before parsing
+                        if (!isNaN(value)) {
+                            displayInput.value = 'RM ' + value.toFixed(2);
+                            document.getElementById('serviceFee').value = value.toFixed(2); // Set the hidden input to the float value
+                        }
+                    }
+                    
+                    function removeExtraDecimals() {
+                        var displayInput = document.getElementById('displayServiceFee');
+                        var value = displayInput.value.replace(/RM\s*/i, ''); // Remove the RM prefix before checking
+                        if (value.includes('.')) {
+                            var parts = value.split('.');
+                            if (parts[1].length > 2) {
+                                displayInput.value = 'RM ' + parts[0] + '.' + parts[1].substring(0, 2);
+                            } else {
+                                displayInput.value = 'RM ' + value;
+                            }
+                        } else {
+                            displayInput.value = 'RM ' + value;
+                        }
+                        document.getElementById('serviceFee').value = parseFloat(value); // Set the hidden input to the float value
+                    }
+                    
+                    // Set the initial value with RM prefix if updating an existing record
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var hiddenInput = document.getElementById('serviceFee');
+                        var displayInput = document.getElementById('displayServiceFee');
+                        var initialValue = hiddenInput.value;
+                        if (initialValue) {
+                            displayInput.value = 'RM ' + parseFloat(initialValue).toFixed(2);
+                        }
+                    });
+                    </script>
+
+                    <div class="form-group mb-3">
+                        <button class="btn btn-primary" type="submit">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

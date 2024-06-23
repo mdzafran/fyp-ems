@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Estate Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .pic-table th,
+        .pic-table td {
+            padding: 8px;
+        }
+
+        .pic-table th:first-child,
+        .pic-table td:first-child {
+            padding-left: 0;
+        }
+
+        .pic-table th:last-child,
+        .pic-table td:last-child {
+            padding-right: 0;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" th:fragment="header">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">Estate Management System</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</nav>
+<br />
+<br />
+<br />
+
+<div class="container">
+    <div class="row col-md-8 offset-md-2">
+        <div class="card">
+            <div th:if="${param.success}">
+                <div class="alert alert-info">Please add an external agency</div>
+            </div>
+            <div class="card-header">
+                <h2 class="text-center">Add</h2>
+            </div>
+            <div class="card-body">
+
+            <form id="payment-form" method="POST" action="/api/payment/process">
+                <div class="form-group mb-3">
+                    <label class="form-label" for="card-number">Card Number:</label>
+                    <input class="form-control" type="text" id="card-number" name="cardNumber" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label class="form-label" for="exp-month">Expiration Month:</label>
+                    <input class="form-control" type="number" id="exp-month" name="expMonth" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label class="form-label" for="exp-year">Expiration Year:</label>
+                    <input class="form-control" type="number" id="exp-year" name="expYear" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label class="form-label" for="cvc">CVC:</label>
+                    <input class="form-control" type="text" id="cvc" name="cvc" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label class="form-label" for="amount">Amount (in cents):</label>
+                    <input class="form-control" type="number" id="amount" name="amount" required>
+                </div>
+                <div class="form-group mb-3">
+                    <button class="btn btn-primary" type="submit">Pay</button>
+                </div>
+            </form>
+</body>
+</html>
