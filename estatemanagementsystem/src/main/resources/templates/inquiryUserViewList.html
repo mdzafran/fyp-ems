@@ -65,6 +65,10 @@
                             <br>
                             <a th:href="@{/admin/inquiry/confirm/{inquiryId}(inquiryId=${inquiry.id})}" class="btn btn-primary">Confirm</a>
                         </div>
+                        <div th:if="${inquiry.status == 'Payment Completed, Inquiry Ended'}" >
+                            <br>
+                            <a th:href="@{/admin/inquiry/receipt/{inquiryId}(inquiryId=${inquiry.id})}" target="_blank" class="btn btn-primary">Receipt</a>
+                        </div>
                     </td>
                 </tr>
             </tbody>

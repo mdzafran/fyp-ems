@@ -71,7 +71,7 @@
                     </select>
                   </label>
                 </div>
-                <div class="mb-3">
+                <div class="mb-3" th:if="${wasiat.gender == 'lelaki'}">
                   <label class="control-label"
                     >Isteri:
                     <select class="form-control" th:field="*{isteri}">
@@ -85,8 +85,8 @@
                   </label>
                 </div>
 
-                <label for="wifeNames">Nama Isteri :</label>
-                <div id="wifeNamesContainer">
+                <label for="wifeNames" th:if="${wasiat.gender == 'lelaki'}">Nama Isteri :</label>
+                <div id="wifeNamesContainer" th:if="${wasiat.gender == 'lelaki'}">
                     <div th:each="isteri, iterStat : *{isteriDetails}" class="wifeEntry">
                         <input type="text" th:field="*{isteriDetails[__${iterStat.index}__].name}" placeholder="Name">
                         <input type="text" th:field="*{isteriDetails[__${iterStat.index}__].ic}" placeholder="ID Number">
@@ -95,9 +95,9 @@
                     </div>
                 </div>
 
-                <button type="button" onclick="addWifeNameField()">Add Isteri Name</button>
+                <button type="button" onclick="addWifeNameField()" th:if="${wasiat.gender == 'lelaki'}">Add Isteri Name</button>
 
-                <div class="mb-3">
+                <div class="mb-3" th:if="${wasiat.gender == 'perempuan'}">
                   <label class="control-label"
                     >Suami:
                     <select class="form-control" th:field="*{suami}">
@@ -108,8 +108,8 @@
                   </label>
                 </div>
 
-                <label for="husbandNames">Nama Suami :</label>
-                <div id="husbandNamesContainer">
+                <label for="husbandNames" th:if="${wasiat.gender == 'perempuan'}">Nama Suami :</label>
+                <div id="husbandNamesContainer" th:if="${wasiat.gender == 'perempuan'}">
                     <div th:each="suami, iterStat : *{suamiDetails}" class="husbandEntry">
                         <input type="text" th:field="*{suamiDetails[__${iterStat.index}__].name}" placeholder="Name">
                         <input type="text" th:field="*{suamiDetails[__${iterStat.index}__].ic}" placeholder="ID Number">
@@ -118,7 +118,7 @@
                     </div>
                 </div>
 
-                <button type="button" onclick="addHusbandNameField()">Add Suami Name</button>
+                <button type="button" onclick="addHusbandNameField()" th:if="${wasiat.gender == 'perempuan'}">Add Suami Name</button>
 
               
 

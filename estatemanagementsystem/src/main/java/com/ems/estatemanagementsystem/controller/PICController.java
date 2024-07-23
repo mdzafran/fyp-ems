@@ -15,11 +15,11 @@ import com.ems.estatemanagementsystem.service.PICService;
 
 
 @Controller
-public class PICBuilder {
+public class PICController {
     private final PICService picService;
     private final ExternalAgencyService externalAgencyService;
 
-    public PICBuilder (PICService picService, ExternalAgencyService externalAgencyService) {
+    public PICController (PICService picService, ExternalAgencyService externalAgencyService) {
         this.picService = picService;
         this.externalAgencyService = externalAgencyService;
     }

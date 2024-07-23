@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Inquiry Payment Receipt</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #receipt-content {
+            max-width: 600px;
+            margin: auto;
+            border: none;
+            padding: 20px;
+            position: relative;
+        }
+        h1 {
+            text-align: center;
+        }
+        .reference-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-weight: bold;
+        }
+        .customer-info, .payment-details {
+            margin-bottom: 20px;
+        }
+        .customer-info p, .payment-details p {
+            margin: 5px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .total {
+            text-align: right;
+        }
+        .total-value {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="receipt-content">
+        <div class="reference-number">Ref No: <span th:text="${inquiry.id}"></span></div>
+        <br><br>
+        <h1>Inquiry Payment Receipt</h1>
+        <br><br>
+        <div class="customer-info">
+            <p><strong>Customer</strong></p>
+            <div th:each="customer : ${inquiry.user}">
+                <p><strong>Name:</strong> <span th:text="${customer.name}"></span></p>
+                <p><strong>IC Number:</strong> <span th:text="${customer.IDNum}"></span></p>
+                <p><strong>Address:</strong> <span th:text="${customer.address}"></span></p>
+            </div>
+        </div>
+        <br>
+        <div class="payment-details">
+            <p><strong>Payment Details</strong></p>
+            <table>
+                <thead>
+                    <tr>
+                        <!-- <th>No</th> -->
+                        <th>Agency</th>
+                        <th>Price (RM)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="agency : ${inquiry.inquiryAgency}">
+                        <!-- <td th:text="${iterStat.index + 1}"></td> -->
+                        <td th:text="${agency.agencyName}"></td>
+                        <td class="price" th:text="${agency.serviceFee}"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <p class="total"><b>Total: </b><span class="price" th:text="${inquiry.totalPayment}"></span></p>
+        </div>
+    </div>
+    <button onclick="downloadPDF()">Download PDF</button>
+
+    <script>
+        function downloadPDF() {
+            const element = document.getElementById('receipt-content');
+            html2pdf(element, {
+                margin: 1,
+                filename: 'receipt.pdf',
+                html2canvas: { scale: 2 },
+                jsPDF: { orientation: 'portrait' }
+            });
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var serviceFeeElements = document.querySelectorAll('.price');
+            serviceFeeElements.forEach(function(element) {
+                var value = parseFloat(element.textContent);
+                if (!isNaN(value)) {
+                    element.textContent = 'RM ' + value.toFixed(2);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

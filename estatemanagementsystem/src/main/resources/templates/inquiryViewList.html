@@ -47,8 +47,10 @@
                     </td>
                     <td th:text="${inquiry.agreement} ? 'Agreed' : 'Denied'"></td>
                     <td>
-                        <b>IC : </b><br><p th:text="${inquiry.icFilePath}"></p>
-                        <b>Death Certificate : </b><br><p th:text="${inquiry.deathCertPath}"></p>
+                        <b>Identity Card | </b>
+                        <a th:href="@{/files/{fileName}(fileName=${inquiry.icFilePath})}" download>Download</a><br>
+                        <b>Death Certificate | </b>
+                        <a th:href="@{/files/{fileName}(fileName=${inquiry.deathCertPath})}" download>Download</a>
                     </td>
                     <td>
                         <p th:text="${inquiry.status}"></p>
@@ -62,6 +64,10 @@
                         <div th:if="${inquiry.status == 'Estate Available, Pending Payment'}" >
                             <br>
                             <a th:href="@{/inquiry/checkout/{inquiryId}(inquiryId=${inquiry.id})}" class="btn btn-primary">Pay</a>
+                        </div>
+                        <div th:if="${inquiry.status == 'Payment Completed, Inquiry Ended'}" >
+                            <br>
+                            <a th:href="@{/inquiry/receipt/{inquiryId}(inquiryId=${inquiry.id})}" target="_blank" class="btn btn-primary">Receipt</a>
                         </div>
                     </td>
                 </tr>
