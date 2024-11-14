@@ -7,5 +7,5 @@ import com.ems.estatemanagementsystem.entity.Inquiry;
 
 @Repository
 public interface InquiryRepository extends JpaRepository<Inquiry, Long>{
-    
+ 
 }

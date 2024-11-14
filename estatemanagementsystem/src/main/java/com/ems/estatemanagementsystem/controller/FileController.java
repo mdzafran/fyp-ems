@@ -10,14 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
-
 @RestController
 @RequestMapping("/files")
 public class FileController {
 
-    private final Path fileStorageLocation = Paths.get("dir/file").toAbsolutePath().normalize();
-
+    private final Path fileStorageLocation = Path.of("dir/file").toAbsolutePath().normalize();
+    private final Path fileStorageLocation = Path.of("dir/file").toAbsolutePath().normalize();
     @GetMapping("/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) {
         try {

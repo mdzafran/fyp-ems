@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.4</version>
+		<version>3.3.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ems</groupId>
@@ -17,6 +17,12 @@
 		<java.version>21</java.version>
 	</properties>
 	<dependencies>
+
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-actuator</artifactId>
+	</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
@@ -73,9 +79,9 @@
 		</dependency>
 	
    <dependency>
-     <groupId>javax</groupId>
-     <artifactId>javaee-api</artifactId>
-     <version>8.0.1</version>
+     <groupId>jakarta.platform</groupId>
+     <artifactId>jakarta.jakartaee-api</artifactId>
+     <version>9.0.0</version>
    </dependency>
 
 	<dependency>
@@ -97,7 +103,7 @@
   <dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring</artifactId>
-    <version>2.5.6.SEC03</version>
+    <version>5.3.39</version>
   </dependency>
   <dependency>
     <groupId>org.springframework.boot</groupId>

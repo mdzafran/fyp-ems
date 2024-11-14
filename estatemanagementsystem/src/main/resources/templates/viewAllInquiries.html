@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Inquiries</title>
+</head>
+<body>
+    <h1>All Inquiries</h1>
+    <ul>
+        <c:forEach var="inquiry" items="${inquiries}">
+            <li>
+                <a href="/inquiry/view/${inquiry.id}">Inquiry ID: ${inquiry.id} - Details: ${inquiry.details}</a>
+            </li>
+        </c:forEach>
+    </ul>
+</body>
+</html>

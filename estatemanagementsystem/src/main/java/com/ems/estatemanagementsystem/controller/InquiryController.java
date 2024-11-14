@@ -72,9 +72,9 @@ public class InquiryController {
 
     @PostMapping("/inquiry/submit")
     public String submitInquiry(@ModelAttribute Inquiry inquiry,
-                                @RequestParam("agencyIds") List<Long> agencyIds,
-                                @RequestParam("icFile") MultipartFile icFile,
-                                @RequestParam("deathCert") MultipartFile deathCert,
+                                @RequestParam List<Long> agencyIds,
+                                @RequestParam MultipartFile icFile,
+                                @RequestParam MultipartFile deathCert,
                                 Model model) {
 
         try {
@@ -235,7 +235,7 @@ public class InquiryController {
     }
 
     @GetMapping("/inquiry/receipt/{inquiryId}")
-    public String getReceiptForUser(@PathVariable("inquiryId") Long inquiryId, Model model) {
+    public String getReceiptForUser(@PathVariable Long inquiryId, Model model) {
 
         InquiryDTO inquiry = inquiryService.findInquiryById(inquiryId);
 
@@ -250,7 +250,7 @@ public class InquiryController {
     }
 
     @GetMapping("/admin/inquiry/receipt/{inquiryId}")
-    public String getReceiptForAdmin(@PathVariable("inquiryId") Long inquiryId, Model model) {
+    public String getReceiptForAdmin(@PathVariable Long inquiryId, Model model) {
 
         InquiryDTO inquiry = inquiryService.findInquiryById(inquiryId);
 
@@ -264,4 +264,29 @@ public class InquiryController {
         return "paymentReceipt";
     }
     
+}
+
+@GetMapping("/inquiry/make")
+public String makeInquiryForm(Model model) {
+    model.addAttribute("inquiry", new InquiryDTO());  // Assuming InquiryDTO for form binding
+    return "makeInquiry";  // Corresponds to makeInquiry.html form
+}
+
+@PostMapping("/inquiry/make")
+public String makeInquirySubmit(@ModelAttribute InquiryDTO inquiryDTO) {
+    inquiryService.saveInquiry(inquiryDTO);
+    return "redirect:/inquiry/viewAll";  // Redirect to view all inquiries after submission
+}
+
+@GetMapping("/inquiry/viewAll")
+public String viewAllInquiries(Model model) {
+    List<Inquiry> inquiries = inquiryService.findAllInquiriesForPewaris();
+    model.addAttribute("inquiries", inquiries);
+    return "viewAllInquiries";  // Corresponds to viewAllInquiries.html
+}
+
+@PostMapping("/inquiry/updateStatus/{id}")
+public String updateInquiryStatus(@PathVariable Long id, @RequestParam String status) {
+    inquiryService.updateInquiryStatus(id, status);
+    return "redirect:/inquiry/view/" + id;  // Redirect back to the inquiry view page
 }

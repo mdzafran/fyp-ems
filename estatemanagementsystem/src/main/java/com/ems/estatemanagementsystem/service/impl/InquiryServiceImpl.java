@@ -13,8 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -63,8 +61,8 @@ public class InquiryServiceImpl implements InquiryService {
 
     private String saveFile(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
-        Path filePath = Paths.get(uploadDirectory, fileName);
-        Files.write(filePath, file.getBytes());
+        Path filePath = Path.of(uploadDirectory, fileName);
+        Path filePath = Path.of(uploadDirectory, fileName);
         return fileName;
     }
     
@@ -125,4 +123,18 @@ public class InquiryServiceImpl implements InquiryService {
         return inquiryRepository.findById(id).orElse(null);
     }
 
+    @Service
+    public class InquiryServiceImpl implements InquiryService {
+    
+        private final InquiryRepository inquiryRepository;
+    
+        public InquiryServiceImpl(InquiryRepository inquiryRepository) {
+            this.inquiryRepository = inquiryRepository;
+        }
+    
+        @Override
+        public Inquiry findInquiryById(Long id) {
+            return inquiryRepository.findById(id).orElse(null);  
+    }
+    
 }
